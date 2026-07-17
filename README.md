@@ -3,10 +3,11 @@
 Official implementation of **HiFormer: Hierarchical Transformer with
 Box-packed Positional Encoding for 3D Part Assembly**.
 
-Songle Chen, Lulu Dong, Yijiao Zhou, Siguang Chen, and Kai Xu.
-
-The paper has been accepted for publication in *IEEE Transactions on
-Visualization and Computer Graphics*. [DOI](https://doi.org/10.1109/TVCG.2026.3662816)
+S. Chen, L. Dong, Y. Zhou, S. Chen and K. Xu, "HiFormer: Hierarchical
+Transformer With Box-Packed Positional Encoding for 3D Part Assembly,"
+in *IEEE Transactions on Visualization and Computer Graphics*,
+vol. 32, no. 7, pp. 5128–5143, July 2026.
+[DOI](https://doi.org/10.1109/TVCG.2026.3662816)
 
 HiFormer predicts the 6-DoF pose of each unlabeled part from its point cloud.
 It combines multi-task 3D Swin Transformer features, hierarchical part-group
