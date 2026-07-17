@@ -15,7 +15,8 @@ deterministic Chair training and evaluation pipeline.
 
 ## Architecture
 
-![HiFormer architecture](assets/framework.png)
+<img width="4800" height="2780" alt="655a7cae65b1ded8e0dea53e11d35cd4" src="https://github.com/user-attachments/assets/dd8547f5-ec3b-453b-a763-1952ca998496" />
+
 
 Using the provided 3D point clouds of parts without semantic information, HiFormer infers part relationships purely
 from geometry and predicts the 6-DoF of each part to generate a perceptually consistent shape. The lower panel illustrates
