@@ -116,25 +116,23 @@ The table reports results with various sampling times *N* for diversity
 modeling on the PartNet dataset. Higher *N* consistently improves all
 metrics as the model generates more candidate assemblies per shape.
 
-| *N* | SCD ↓ | | | PA ↑ | | | CA ↑ | | | ckpt |
+| *N* | SCD ↓ | | | PA ↑ | | | CA ↑ | | | model |
 |-----|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:---:|
 | | Chair | Table | Lamp | Chair | Table | Lamp | Chair | Table | Lamp | |
 | 10  | 0.0048 | 0.0032 | 0.0085 | 66.32 | 66.55 | 43.42 | 54.18 | 64.38 | 73.01 | [model](pretrained_models/diversity%20modeling/checkpoint_best.pth.tar) |
-| 20  | 0.0047 | 0.0031 | 0.0082 | 66.66 | 66.74 | 44.21 | 54.23 | 64.77 | 74.53 | |
-| 30  | 0.0046 | 0.0030 | 0.0080 | 66.97 | 66.96 | 44.43 | 54.34 | 65.02 | 75.58 | |
-| 40  | 0.0045 | 0.0029 | 0.0079 | 67.22 | 67.01 | 44.81 | 54.39 | 65.10 | 76.34 | |
-| 50  | 0.0045 | 0.0029 | 0.0076 | **68.67** | **67.11** | **46.09** | **54.44** | **65.18** | **78.72** | |
-
-
+| 20  | 0.0047 | 0.0031 | 0.0082 | 66.66 | 66.74 | 44.21 | 54.23 | 64.77 | 74.53 | - |
+| 30  | 0.0046 | 0.0030 | 0.0080 | 66.97 | 66.96 | 44.43 | 54.34 | 65.02 | 75.58 | - |
+| 40  | 0.0045 | 0.0029 | 0.0079 | 67.22 | 67.01 | 44.81 | 54.39 | 65.10 | 76.34 | - |
+| 50  | 0.0045 | 0.0029 | 0.0076 | **68.67** | **67.11** | **46.09** | **54.44** | **65.18** | **78.72** | - |
 
 ### Deterministic Modeling
 
 Result of the deterministic baseline (single prediction, no noise).
 
-| | SCD ↓ | | | PA ↑ | | | CA ↑ | | | ckpt |
-|-|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:---:|
-| | Chair | Table | Lamp | Chair | Table | Lamp | Chair | Table | Lamp | |
-| | 0.0056 | 0.0037 | 0.0108 | 61.36 | 62.35 | 35.31 | 45.88 | 61.10 | 56.89 | [model](pretrained_models/deterministic%20modeling/checkpoint_best.pth.tar) |
+| SCD ↓ | | | PA ↑ | | | CA ↑ | | | model |
+|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:---:|
+| Chair | Table | Lamp | Chair | Table | Lamp | Chair | Table | Lamp | |
+| 0.0056 | 0.0037 | 0.0108 | 61.36 | 62.35 | 35.31 | 45.88 | 61.10 | 56.89 | [model](pretrained_models/deterministic%20modeling/checkpoint_best.pth.tar) |
 
 ## Citation
 
