@@ -129,14 +129,12 @@ metrics as the model generates more candidate assemblies per shape.
 
 ### Deterministic Modeling
 
-Comparison between the deterministic baseline (single prediction) and the
-best diversity result (*N* = 50).
 
-| Setting | SCD ↓ | | | PA ↑ | | | CA ↑ | | |
+| SCD ↓ | | | PA ↑ | | | CA ↑ | | |
 |---------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 | | Chair | Table | Lamp | Chair | Table | Lamp | Chair | Table | Lamp |
 | Deterministic | 0.0056 | 0.0037 | 0.0108 | [61.36](pretrained_models/deterministic%20modeling/checkpoint_best.pth.tar) | 62.35 | 35.31 | 45.88 | 61.10 | 56.89 |
-| Diversity (*N*=50) | 0.0045 | 0.0029 | 0.0076 | **68.67** | **67.11** | **46.09** | **54.44** | **65.18** | **78.72** |
+
 ## Citation
 
 If you find this project useful, please cite:
