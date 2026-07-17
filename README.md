@@ -108,7 +108,35 @@ python exps/TransAssembly/run.py \
   --checkpoint pretrained_models/checkpoint_best.pth.tar \
   --output-dir outputs/chair_eval
 ```
+## Results
 
+### Diversity Modeling
+
+The table reports results with various sampling times *N* for diversity
+modeling on the PartNet dataset. Higher *N* consistently improves all
+metrics as the model generates more candidate assemblies per shape.
+
+| *N* | SCD ↓ | | | PA ↑ | | | CA ↑ | | |
+|-----|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+| | Chair | Table | Lamp | Chair | Table | Lamp | Chair | Table | Lamp |
+| 10  | 0.0048 | 0.0032 | 0.0085 | [66.32](pretrained_models/diversity%20modeling/checkpoint_best.pth.tar) | 66.55 | 43.42 | 54.18 | 64.38 | 73.01 |
+| 20  | 0.0047 | 0.0031 | 0.0082 | 66.66 | 66.74 | 44.21 | 54.23 | 64.77 | 74.53 |
+| 30  | 0.0046 | 0.0030 | 0.0080 | 66.97 | 66.96 | 44.43 | 54.34 | 65.02 | 75.58 |
+| 40  | 0.0045 | 0.0029 | 0.0079 | 67.22 | 67.01 | 44.81 | 54.39 | 65.10 | 76.34 |
+| 50  | 0.0045 | 0.0029 | 0.0076 | **68.67** | **67.11** | **46.09** | **54.44** | **65.18** | **78.72** |
+
+
+
+### Deterministic Modeling
+
+Comparison between the deterministic baseline (single prediction) and the
+best diversity result (*N* = 50).
+
+| Setting | SCD ↓ | | | PA ↑ | | | CA ↑ | | |
+|---------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+| | Chair | Table | Lamp | Chair | Table | Lamp | Chair | Table | Lamp |
+| Deterministic | 0.0056 | 0.0037 | 0.0108 | [61.36](pretrained_models/deterministic%20modeling/checkpoint_best.pth.tar) | 62.35 | 35.31 | 45.88 | 61.10 | 56.89 |
+| Diversity (*N*=50) | 0.0045 | 0.0029 | 0.0076 | **68.67** | **67.11** | **46.09** | **54.44** | **65.18** | **78.72** |
 ## Citation
 
 If you find this project useful, please cite:
