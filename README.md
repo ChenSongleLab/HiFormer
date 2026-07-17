@@ -87,23 +87,49 @@ prepare_data/
 
 Run the following commands from the repository root.
 
-### Training
+### Deterministic Training
+
+Single-prediction baseline without noise injection.
 
 ```bash
 python exps/TransAssembly/run.py \
   --data_dir /path/to/prepare_data \
-  --output-dir outputs/chair
+  --backbone swin_transformer \
+  --output-dir outputs/chair_det
 ```
 
-### Evaluation
+### Deterministic Evaluation
 
 ```bash
 python exps/TransAssembly/run.py \
   --eval-only 1 \
   --data_dir /path/to/prepare_data \
   --val_data_fn Chair.test.npy \
-  --checkpoint pretrained_models/checkpoint_best.pth.tar \
-  --output-dir outputs/chair_eval
+  --checkpoint outputs/chair_det/checkpoint_best.pth.tar \
+  --output-dir outputs/chair_det_eval
+```
+
+### Diversity Training
+
+Resume from a deterministic checkpoint with noise injection and
+Min-of-N (MoN) sampling.
+
+```bash
+python exps/TransAssembly/run_sw.py \
+  --data_dir /path/to/prepare_data \
+  --resume outputs/chair_det/checkpoint_best.pth.tar \
+  --output-dir outputs/chair_div
+```
+
+### Diversity Evaluation
+
+```bash
+python exps/TransAssembly/run_sw.py \
+  --eval-only 1 \
+  --data_dir /path/to/prepare_data \
+  --val_data_fn Chair.test.npy \
+  --checkpoint outputs/chair_div/checkpoint_best.pth.tar \
+  --output-dir outputs/chair_div_eval
 ```
 ## Results
 
