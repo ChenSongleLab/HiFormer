@@ -83,10 +83,6 @@ prepare_data/
 `-- contact_points/
     `-- pairs_with_contact_points_<shape_id>_level3.npy
 ```
-
-The dataset is not included in this repository. See
-[prep_data/README.md](prep_data/README.md) to prepare the data from PartNet.
-
 ## Quick Start
 
 Run the following commands from the repository root.
@@ -117,23 +113,80 @@ The table reports results with various sampling times *N* for diversity
 modeling on the PartNet dataset. Higher *N* consistently improves all
 metrics as the model generates more candidate assemblies per shape.
 
-| *N* | SCD ↓ | | | PA ↑ | | | CA ↑ | | | model |
-|-----|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:---:|
-| | Chair | Table | Lamp | Chair | Table | Lamp | Chair | Table | Lamp | |
-| 10  | 0.0048 | 0.0032 | 0.0085 | 66.32 | 66.55 | 43.42 | 54.18 | 64.38 | 73.01 | [model](https://github.com/ChenSongleLab/HiFormer/releases/download/v1.0/diversity_checkpoint_best.pth.tar) |
-| 20  | 0.0047 | 0.0031 | 0.0082 | 66.66 | 66.74 | 44.21 | 54.23 | 64.77 | 74.53 | - |
-| 30  | 0.0046 | 0.0030 | 0.0080 | 66.97 | 66.96 | 44.43 | 54.34 | 65.02 | 75.58 | - |
-| 40  | 0.0045 | 0.0029 | 0.0079 | 67.22 | 67.01 | 44.81 | 54.39 | 65.10 | 76.34 | - |
-| 50  | 0.0045 | 0.0029 | 0.0076 | **68.67** | **67.11** | **46.09** | **54.44** | **65.18** | **78.72** | - |
+<table>
+  <tr>
+    <th rowspan="2"><em>N</em></th>
+    <th colspan="3">SCD ↓</th>
+    <th colspan="3">PA ↑</th>
+    <th colspan="3">CA ↑</th>
+    <th rowspan="2">model</th>
+  </tr>
+  <tr>
+    <th>Chair</th><th>Table</th><th>Lamp</th>
+    <th>Chair</th><th>Table</th><th>Lamp</th>
+    <th>Chair</th><th>Table</th><th>Lamp</th>
+  </tr>
+  <tr align="center">
+    <td>10</td>
+    <td>0.0048</td><td>0.0032</td><td>0.0085</td>
+    <td>66.32</td><td>66.55</td><td>43.42</td>
+    <td>54.18</td><td>64.38</td><td>73.01</td>
+    <td><a href="https://github.com/ChenSongleLab/HiFormer/releases/download/v1.0/diversity_checkpoint_best.pth.tar">model</a></td>
+  </tr>
+  <tr align="center">
+    <td>20</td>
+    <td>0.0047</td><td>0.0031</td><td>0.0082</td>
+    <td>66.66</td><td>66.74</td><td>44.21</td>
+    <td>54.23</td><td>64.77</td><td>74.53</td>
+    <td>-</td>
+  </tr>
+  <tr align="center">
+    <td>30</td>
+    <td>0.0046</td><td>0.0030</td><td>0.0080</td>
+    <td>66.97</td><td>66.96</td><td>44.43</td>
+    <td>54.34</td><td>65.02</td><td>75.58</td>
+    <td>-</td>
+  </tr>
+  <tr align="center">
+    <td>40</td>
+    <td>0.0045</td><td>0.0029</td><td>0.0079</td>
+    <td>67.22</td><td>67.01</td><td>44.81</td>
+    <td>54.39</td><td>65.10</td><td>76.34</td>
+    <td>-</td>
+  </tr>
+  <tr align="center">
+    <td>50</td>
+    <td>0.0045</td><td>0.0029</td><td>0.0076</td>
+    <td><b>68.67</b></td><td><b>67.11</b></td><td><b>46.09</b></td>
+    <td><b>54.44</b></td><td><b>65.18</b></td><td><b>78.72</b></td>
+    <td>-</td>
+  </tr>
+</table>
 
 ### Deterministic Modeling
 
-Result of the deterministic baseline.
+Result of the deterministic baseline (single prediction, no noise).
 
-| SCD ↓ | | | PA ↑ | | | CA ↑ | | | model |
-|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:---:|
-| Chair | Table | Lamp | Chair | Table | Lamp | Chair | Table | Lamp | |
-| 0.0056 | 0.0037 | 0.0108 | 61.36 | 62.35 | 35.31 | 45.88 | 61.10 | 56.89 | [model](https://github.com/ChenSongleLab/HiFormer/releases/download/v1.0/checkpoint_best.pth.tar) |
+<table>
+  <tr>
+    <th colspan="3">SCD ↓</th>
+    <th colspan="3">PA ↑</th>
+    <th colspan="3">CA ↑</th>
+    <th>model</th>
+  </tr>
+  <tr>
+    <th>Chair</th><th>Table</th><th>Lamp</th>
+    <th>Chair</th><th>Table</th><th>Lamp</th>
+    <th>Chair</th><th>Table</th><th>Lamp</th>
+    <th></th>
+  </tr>
+  <tr align="center">
+    <td>0.0056</td><td>0.0037</td><td>0.0108</td>
+    <td>61.36</td><td>62.35</td><td>35.31</td>
+    <td>45.88</td><td>61.10</td><td>56.89</td>
+    <td><a href="https://github.com/ChenSongleLab/HiFormer/releases/download/v1.0/checkpoint_best.pth.tar">model</a></td>
+  </tr>
+</table>
 
 
 ## Citation
