@@ -31,7 +31,7 @@ hierarchical feature fusion, which processes refined part poses from Layer 1
 |-- assets/                        # figures used by the documentation
 |-- exps/
 |   |-- TransAssembly/
-|   |   |-- run.py                 # command-line entry point
+|   |   |-- run_sw.py                 # command-line entry point
 |   |   |-- train.py               # one training epoch
 |   |   |-- eval.py                # evaluation loop
 |   |   |-- datasets/partnet.py    # processed PartNet loader
