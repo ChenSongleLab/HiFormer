@@ -1,13 +1,4 @@
-'''
-    prepare shape data 
-    include:
-        point clouds: P x N x 3
-        part ids: P         # the class index in partnet dataset
-        geo part ids: P     # the class index according to the geo information
-        part poses: P x 7   # T and R
-            T: center of a part
-            R: quaternion
-'''
+
 import numpy as np
 import json
 import sys
@@ -27,13 +18,6 @@ import ipdb
 
 from scipy.spatial.distance import cdist
 from sklearn.decomposition import PCA
-'''
-    input: 
-        size P x 3
-        gt_pcs P x 1000 x 3
-    output:
-        sym_stick P
-'''
 
 
 def get_pc_center(pc):
