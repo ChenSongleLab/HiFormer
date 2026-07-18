@@ -89,19 +89,20 @@ Run the following commands from the repository root.
 
 ### Deterministic Training
 
-Single-prediction baseline without noise injection.
+Single-prediction baseline without noise injection. The Swin backbone
+is trained from scratch (`--freeze-backbone 0`).
 
 ```bash
-python exps/TransAssembly/run.py \
+python exps/TransAssembly/run_sw.py \
   --data_dir /path/to/prepare_data \
-  --backbone swin_transformer \
+  --freeze-backbone 0 \
   --output-dir outputs/chair_det
 ```
 
 ### Deterministic Evaluation
 
 ```bash
-python exps/TransAssembly/run.py \
+python exps/TransAssembly/run_sw.py \
   --eval-only 1 \
   --data_dir /path/to/prepare_data \
   --val_data_fn Chair.test.npy \
@@ -111,8 +112,8 @@ python exps/TransAssembly/run.py \
 
 ### Diversity Training
 
-Resume from a deterministic checkpoint with noise injection and
-Min-of-N (MoN) sampling.
+Resume from a deterministic checkpoint with noise injection,
+Min-of-N (MoN) sampling, and frozen backbone (default).
 
 ```bash
 python exps/TransAssembly/run_sw.py \
