@@ -219,11 +219,14 @@ Result of the deterministic baseline (single prediction, no noise).
 If you find this project useful, please cite:
 
 ```bibtex
-@article{chen2026hiformer,
-  title   = {HiFormer: Hierarchical Transformer with Box-packed Positional Encoding for 3D Part Assembly},
-  author  = {Chen, Songle and Dong, Lulu and Zhou, Yijiao and Chen, Siguang and Xu, Kai},
-  journal = {IEEE Transactions on Visualization and Computer Graphics},
-  year    = {2026},
-  doi     = {10.1109/TVCG.2026.3662816}
-}
+@ARTICLE{11386861,
+  author={Chen, Songle and Dong, Lulu and Zhou, Yijiao and Chen, Siguang and Xu, Kai},
+  journal={IEEE Transactions on Visualization and Computer Graphics}, 
+  title={HiFormer: Hierarchical Transformer With Box-Packed Positional Encoding for 3D Part Assembly}, 
+  year={2026},
+  volume={32},
+  number={7},
+  pages={5128-5143},
+  keywords={Three-dimensional displays;Assembly;Solid modeling;Encoding;Feature extraction;Current transformers;Point cloud compression;Noise;6-DOF;Translation;3D part assembly;hierarchical transformer;box-packed positional encoding;multi-task},
+  doi={10.1109/TVCG.2026.3662816}}
 ```
