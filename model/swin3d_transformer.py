@@ -9,13 +9,8 @@ from lib.pointops2.functions import pointops
 from cd.chamfer import chamfer_distance
 
 
-
-
-
-
 class MLP(nn.Module):
-    """ Very simple multi-layer perceptron (also called FFN)"""
-
+  
     def __init__(self, input_dim, hidden_dim, output_dim, num_layers):
         super().__init__()
         self.num_layers = num_layers
@@ -42,9 +37,6 @@ class MLP(nn.Module):
 def grid_sample(pos, batch, size, start, end=None, return_p2v=True):
 
 
-
-
-
     cluster = voxel_grid(pos, batch, size, start=start,end=end)
 
     if return_p2v == False:
@@ -63,8 +55,7 @@ def grid_sample(pos, batch, size, start, end=None, return_p2v=True):
     return cluster, p2v_map, counts
 
 class Mlp(nn.Module):
-    """ Multilayer perceptron."""
-
+  
     def __init__(self, in_features, hidden_features=None, out_features=None, act_layer=nn.GELU, drop=0.):
         super().__init__()
         out_features = out_features or in_features
@@ -110,18 +101,6 @@ class TransitionDown(nn.Module):
 
 
 class WindowAttention(nn.Module):
-    """ Window based multi-head self attention (W-MSA) module with relative position bias.
-    It supports both of shifted and non-shifted window.
-
-    Args:
-        dim (int): Number of input channels.
-        window_size (tuple[int]): The height and width of the window.
-        num_heads (int): Number of attention heads.
-        qkv_bias (bool, optional):  If True, add a learnable bias to query, key, value. Default: True
-        qk_scale (float | None, optional): Override default qk scale of head_dim ** -0.5 if set
-        attn_drop (float, optional): Dropout ratio of attention weight. Default: 0.0
-        proj_drop (float, optional): Dropout ratio of output. Default: 0.0
-    """
 
     def __init__(self, dim, window_size, num_heads, quant_size, rel_query=True, rel_key=False, rel_value=False, qkv_bias=True, qk_scale=None, attn_drop=0., proj_drop=0.):
 
@@ -167,15 +146,7 @@ class WindowAttention(nn.Module):
         return relative_position + self.quant_grid_length - 1
 
     def forward(self, feats, xyz, index_0, index_0_offsets, n_max, index_1, shift_size):
-        """ Forward function.
-
-        Args:
-            feats: N, C
-            xyz: N, 3
-            p2v_idx: n, k
-            counts: n, 
-        """
-
+       
         N, C = feats.shape
         
 
@@ -238,9 +209,6 @@ class SwinTransformerBlock(nn.Module):
 
 
 
-
-
-
         short_cut = feats
 
         feats = self.norm1(feats)
@@ -248,7 +216,6 @@ class SwinTransformerBlock(nn.Module):
         
         feats = short_cut + self.drop_path(feats)
         feats = feats + self.drop_path(self.mlp(self.norm2(feats)))
-
         return feats
 
 class BasicLayer(nn.Module):
@@ -340,7 +307,6 @@ class BasicLayer(nn.Module):
     def forward(self, feats, xyz, offset):
 
 
-
         window_size = torch.tensor([self.window_size]*3).type_as(xyz).to(xyz.device)
 
         offset_ = offset.clone()
@@ -350,8 +316,6 @@ class BasicLayer(nn.Module):
         v2p_map, p2v_map, counts = grid_sample(xyz, batch, window_size, start=None)
 
 
-
-
         N, C = feats.shape
         n, k = p2v_map.shape
         mask = torch.arange(k).unsqueeze(0).cuda() < counts.unsqueeze(-1)
@@ -359,8 +323,6 @@ class BasicLayer(nn.Module):
         index_0 = p2v_map.unsqueeze(-1).expand(-1, -1, k)[mask_mat]
         index_1 = p2v_map.unsqueeze(1).expand(-1, k, -1)[mask_mat]
         M = index_0.shape[0]
-
-
 
 
         index_0, indices = torch.sort(index_0)
@@ -437,14 +399,9 @@ class KPConvSimpleBlock(nn.Module):
 
     def forward(self, feats, xyz, batch, neighbor_idx):
 
-
-
-
-
         feats = self.kpconv(xyz, xyz, neighbor_idx, feats)
         feats = self.activation(self.bn(feats))
         return feats
-
 
 class KPConvResBlock(nn.Module):
     def __init__(self, in_channels, out_channels, prev_grid_size, sigma=1.0, negative_slope=0.2, bn_momentum=0.02):
@@ -465,8 +422,6 @@ class KPConvResBlock(nn.Module):
             self.shortcut_op = nn.Identity()
 
     def forward(self, feats, xyz, batch, neighbor_idx):
-
-
 
 
         
@@ -522,11 +477,7 @@ class Swin(nn.Module):
 
         self.avgpool = nn.AdaptiveAvgPool1d(1)
         self.maxpool = nn.AdaptiveMaxPool1d(1)
-
-
-
         self.init_weights()
-
     def forward(self, feats, xyz, offset, batch, neighbor_idx):
 
         feats_stack = []
@@ -561,61 +512,18 @@ class Swin(nn.Module):
                 xyz = xyz_down
                 offset = offset_down
 
-
-
-
-
         out = []
         start_pos = 0
         for i in range(offset.shape[0]):
             part_feature = self.maxpool((feats[start_pos:offset[i]]).unsqueeze(0).transpose(1, 2))
-
-
-
             start_pos = offset[i]
             out.append(part_feature.squeeze(0).squeeze(-1))
         out_feature = torch.stack(out)
-
-
-
-
-
         loss_points = None
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         return out_feature, loss_points
 
     def init_weights(self):
-        """Initialize the weights in backbone.
-        """
-
+       
         def _init_weights(m):
             if isinstance(m, nn.Linear):
                 trunc_normal_(m.weight, std=.02)
