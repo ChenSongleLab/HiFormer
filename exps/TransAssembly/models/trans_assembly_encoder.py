@@ -1,12 +1,3 @@
-
-"""
-    Transformer-encoder-based framework to predict the pose of each part
-    Input:
-    Output:
-        R and T:  B x P x (3 + 4)
-    Losses:
-        Center L2 Loss, Rotation L2 Loss, Rotation Chamder-Distance Loss
-"""
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -30,11 +21,6 @@ from quaternion import qeuler,qrot
 from .box_ops import *
 
 
-
-
-
-
-
 def show_process_gpu_info(prefix = "", show = True):
     current_gpu_index = 0
     total_memory = torch.cuda.get_device_properties(current_gpu_index).total_memory / (1024 ** 3)
@@ -51,8 +37,7 @@ def show_process_gpu_info(prefix = "", show = True):
 
 
 class TransAssembly_encoder(nn.Module):
-    """
-    """
+   
     def __init__(self, args):
         super(TransAssembly_encoder, self).__init__()
 
@@ -140,17 +125,7 @@ class TransAssembly_encoder(nn.Module):
 
     def forward(self, shape_id, part_pcs, part_boxes, part_valid, gt_part_poses, match_ids, part_ids, num_group, num_group_part, parts_valid_in_group, \
                 groups_valid, flat2group_index, group2flat_index, contact_points=None, sym_info=None):
-        """
-            Input:
-                part_pcs: B x P x N x 3
-                part_valid: B x P
-                gt_part_poses: B x P x (3 + 4)
-            Output:
-                pred_rt: B x P x (3 + 4) (T + R)
-        """
-
-
-
+    
         trans_loss = None
         batch_size, num_part, _, _ = part_pcs.size()
         base_feat_list = []
@@ -230,9 +205,7 @@ class TransAssembly_encoder(nn.Module):
 
     def prepare_filters(self, part_feat, part_pcs, part_valid, part_pose, part_ids, match_ids,
                            contact_points=None, sym_info=None, filter_id=0):
-        """
-        Now only support num_filter == n.
-        """
+    
         batch_size, num_part, len_feat = part_feat.size()
         _, _, num_point, _ = part_pcs.size()
         num_filter = self.args.num_filter
@@ -409,283 +382,3 @@ class TransAssembly_encoder(nn.Module):
         dense2flat_index = torch.from_numpy(dense2flat_index).view(bs*num_part).unsqueeze(-1).repeat(1, 256).cuda(non_blocking=True)
         return dense2flat_index
 
-
-
-
-
-    def render_parts_pcs(self, pts, rows = 1, cols = 1, index = 1, xyzrange = None, fig = None, show = True, save_path=None, part_ids=None):
-
-
-
-
-
-
-        pts = pts.cpu().detach().numpy()
-        part_ids = part_ids.cpu().detach().numpy()
-
-        if fig == None:
-            ax = plt.figure().add_subplot(rows, cols, index, projection='3d')
-        else:
-            ax = fig.add_subplot(rows, cols, index, projection='3d')
-        if list(xyzrange) != None:
-            ax.set_xlim(xyzrange[0], xyzrange[1])
-            ax.set_ylim(xyzrange[2], xyzrange[3])
-            ax.set_zlim(xyzrange[4], xyzrange[5])
-        for i in range(pts.shape[0]):
-            ax.scatter(pts[i][:,0], pts[i][:,1], pts[i][:,2], marker='o', c=plt.cm.Set1(part_ids[i]/10.0))
-        if show:
-            plt.show()
-        if save_path != None:
-            plt.savefig(save_path)
-
-    def render_parts_pcs_pred_gt(self, pts, pts_gt,rows = 1, cols = 1, index = 1, xyzrange = None, fig = None, show = True, save_path=None, part_ids=None):
-
-
-
-
-
-
-        pts = pts.cpu().detach().numpy()
-        pts_gt = pts_gt.cpu().detach().numpy()
-        part_ids = part_ids.cpu().detach().numpy()
-
-        if fig == None:
-            ax = plt.figure().add_subplot(rows, cols, index, projection='3d')
-        else:
-            ax = fig.add_subplot(rows, cols, index, projection='3d')
-        if list(xyzrange) != None:
-            ax.set_xlim(xyzrange[0], xyzrange[1])
-            ax.set_ylim(xyzrange[2], xyzrange[3])
-            ax.set_zlim(xyzrange[4], xyzrange[5])
-        for i in range(pts.shape[0]):
-            ax.scatter(pts[i][:,0], pts[i][:,1], pts[i][:,2], marker='o',c=plt.cm.Set1(part_ids[i]/10.0))
-            ax.scatter(pts_gt[i][:,0], pts_gt[i][:,1], pts_gt[i][:,2], marker='o',c=plt.cm.Set1(part_ids[i]/10.0))
-
-        if show:
-            plt.show()
-        if save_path != None:
-            plt.savefig(save_path)
-
-    def render_parts_pcs_pred_gt_in_one_image(self, pts, pts_gt, box, box_gt, rows = 1, cols = 1, index = 1, xyzrange = None, fig = None, show = False, save_path=None, part_ids=None, shape_cd_loss=None, shapecd_dist1=None, shapecd_dist2=None):
-
-
-
-
-
-
-
-        dist = shapecd_dist1+shapecd_dist2
-        dist = dist.view(pts.shape[0], -1)
-        dist = dist.cpu().detach().numpy()
-        shape_cd_loss = shape_cd_loss.cpu().detach().numpy()
-        show_index = np.where(dist > shape_cd_loss, True, False)
-        pts = pts.cpu().detach().numpy()
-        pts_gt = pts_gt.cpu().detach().numpy()
-        part_ids = part_ids.cpu().detach().numpy()
-
-
-        rows = 2
-        cols = 2
-        index = 1
-
-        fig = plt.figure()
-        for index in range(1,rows*cols+1):
-            ax = fig.add_subplot(rows, cols, index, projection='3d')
-            if list(xyzrange) != None:
-                ax.set_xlim(xyzrange[0], xyzrange[1])
-                ax.set_ylim(xyzrange[2], xyzrange[3])
-                ax.set_zlim(xyzrange[4], xyzrange[5])
-
-            for i in range(pts.shape[0]):
-                if index == 1:
-                    ax.scatter(pts[i][:,0], pts[i][:,1], pts[i][:,2], marker='o',c=plt.cm.Set1(part_ids[i]/10.0))
-                    for l in box:
-                        ax.plot(l[0], l[1], l[2], c=plt.cm.Set1(part_ids[i]/10.0))
-                if index == 2:
-                    ax.scatter(pts_gt[i][:,0], pts_gt[i][:,1], pts_gt[i][:,2], marker='o',c=plt.cm.Set1(part_ids[i]/10.0))
-                    for l in box_gt:
-                        ax.plot(l[0], l[1], l[2], c=plt.cm.Set1(part_ids[i]/10.0))
-                if index == 3:
-                    ax.scatter(pts[i][:, 0], pts[i][:, 1], pts[i][:, 2], marker='o', c=plt.cm.Set1(part_ids[i] / 10.0))
-                    ax.scatter(pts_gt[i][:, 0], pts_gt[i][:, 1], pts_gt[i][:, 2], marker='o', c=plt.cm.Set1(part_ids[i] / 10.0))
-                if index == 4:
-                    ax.scatter(pts[i][:, 0], pts[i][:, 1], pts[i][:, 2], marker='o', c='r')
-                    ax.scatter(pts_gt[i][:, 0], pts_gt[i][:, 1], pts_gt[i][:, 2], marker='o', c='g')
-                    ax.scatter(pts[i,show_index[i], 0], pts[i,show_index[i], 1], pts[i,show_index[i], 2], marker='o', c='b')
-                    ax.scatter(pts_gt[i, show_index[i], 0], pts_gt[i, show_index[i], 1], pts_gt[i, show_index[i], 2], marker='o', c='m')
-
-        if show:
-            plt.show()
-        if save_path != None:
-            plt.savefig(save_path)
-        plt.close(fig)
-
-    def show_results(self, shape_id,  part_valid, part_pcs, part_boxes, pred_poses, gt_poses, shape_cd_loss,part_ids, shapecd_dist1, shapecd_dist2):
-
-        box_vertex = box_xyxy_to_vextex(box_cxcywh_to_xyxy(part_boxes))
-
-        center = pred_poses[:, :, :3]
-        quat = pred_poses[:, :, 3:]
-        center_rep = center.unsqueeze(2).repeat(1, 1, part_pcs.shape[2], 1)
-        quat_rep = quat.unsqueeze(2).repeat(1, 1, part_pcs.shape[2], 1)
-        part_pcs_pred = qrot(quat_rep, part_pcs) + center_rep
-
-        center_rep = center.unsqueeze(2).repeat(1, 1, 8, 1)
-        quat_rep = quat.unsqueeze(2).repeat(1, 1, 8, 1)
-        part_boxes_pred = qrot(quat_rep, box_vertex) + center_rep
-        part_boxes_pred = box_12_lines(part_boxes_pred)
-
-        center = gt_poses[:, :, :3]
-        quat = gt_poses[:, :, 3:]
-        center_rep = center.unsqueeze(2).repeat(1, 1, part_pcs.shape[2], 1)
-        quat_rep = quat.unsqueeze(2).repeat(1, 1, part_pcs.shape[2], 1)
-        part_pcs_gt = qrot(quat_rep, part_pcs) + center_rep
-
-        center_rep = center.unsqueeze(2).repeat(1, 1, 8, 1)
-        quat_rep = quat.unsqueeze(2).repeat(1, 1, 8, 1)
-        part_boxes_gt = qrot(quat_rep, box_vertex) + center_rep
-        part_boxes_gt = box_12_lines(part_boxes_gt)
-
-        xyzrange=np.array([-1,1,-1,1,-1,1])
-        for i in range(part_pcs.shape[0]):
-
-
-
-
-
-
-            save_path = "/mnt/sda/vmware_share/assemble_result/" + str(shape_cd_loss.clone().detach().cpu().numpy()).ljust(18,'0')+ "_" + str(shape_id[i]).rjust(10,'0')+"_"+ str(part_valid[i].sum().cpu().numpy()).rjust(3,'0') + "_gt_pred.jpg"
-            print(save_path)
-
-            self.render_parts_pcs_pred_gt_in_one_image(part_pcs_pred[i], part_pcs_gt[i], part_boxes_pred[i], part_boxes_gt[i], save_path=save_path, part_ids=part_ids[i], xyzrange=xyzrange, show=True, \
-                                                       shape_cd_loss=shape_cd_loss, shapecd_dist1=shapecd_dist1[i], shapecd_dist2=shapecd_dist2[i])
-
-    def test_me(self):
-        xyz = np.random.uniform(-10, 10, (2000, 3))
-        feats = []
-        feats.append(np.ones((len(xyz), 1)))
-        feats = np.hstack(feats)
-
-        voxel_size = 0.025
-
-        coords = np.floor(xyz / voxel_size)
-        _, unique_map, inverse_map = ME.utils.sparse_quantize(coords, return_index=True, return_inverse=True)
-        inds = unique_map
-        coords = coords[inds]
-        return_coords = xyz[inds]
-        coords = ME.utils.batched_coordinates([coords])
-
-        feats = feats[inds]
-
-        feats = torch.tensor(feats, dtype=torch.float32)
-        coords = coords.to(dtype=torch.int32)
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
-        stensor = ME.SparseTensor(feats, coordinates=coords, device=device)
-
-        xx = torch.ones((4, 480, 640)).cuda()
-        bs, ys, xs = torch.where(xx > 0)
-        print("test okay")
-
-
-    def feature_extract_minkowski(self, point_clouds):
-
-
-        if self.use_color:
-            if self.xyz_color:
-                coordinates, features = ME.utils.batch_sparse_collate(
-                    [(p[:, :3] / self.voxel_size, p[:, :]) for p in point_clouds])
-            else:
-                coordinates, features = ME.utils.batch_sparse_collate(
-                    [(p[:, :3] / self.voxel_size, p[:, 3:]) for p in point_clouds])
-        else:
-
-            coordinates, features = ME.utils.batch_sparse_collate(
-
-                [(p[:, :3] / self.voxel_size, p[:, :3]) for p in point_clouds])
-
-
-        origin_voxel = ME.SparseTensor(coordinates=coordinates, features=features)
-
-        x = self.pre_encoder(origin_voxel)
-        batch_num = origin_voxel.C[:, 0].max().long() + 1
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        out = x[-1]
-        features = out.F
-        xyz = out.C[:, 1:] * self.voxel_size
-
-        sampled_features_batch = []
-        sampled_xyz_batch = []
-        sample_inds_batch = []
-        feature_pool_batch = []
-        for batch_id in range(batch_num):
-            batch_id_list = out.C[:, 0]
-            batch_indices = torch.where(batch_id_list == batch_id)
-
-
-            features_batch = features[batch_indices]
-            xyz_batch = xyz[batch_indices]
-
-
-            features_batch = features_batch.transpose(1, 0).contiguous()
-
-
-
-            xyz_batch_squ = xyz_batch.unsqueeze(0)
-            features_batch_squ = features_batch.unsqueeze(0)
-
-            if self.random_fps:
-                new_idx = torch.randperm(xyz_batch_squ.shape[1])
-
-                features_batch_squ = features_batch_squ[:, :, new_idx]
-                xyz_batch_squ = xyz_batch_squ[:, new_idx, :]
-
-
-
-
-
-
-
-
-
-            features_pool = self.avgpool(features_batch_squ)
-
-
-
-            feature_pool_batch.append(features_pool)
-
-
-
-        enc_features_pool = torch.cat(feature_pool_batch)
-
-
-
-
-
-
-
-
-
-
-
-
-        return enc_features_pool
